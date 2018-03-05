@@ -13,11 +13,13 @@ def main():
 
     link = input('Please enter Vinyl Profile Link: ')
     condition = input('Please enter condition: ')
-    #link = 'https://www.discogs.com/Dexys-Midnight-Runners-Emerald-Express-Come-On-Eileen/release/3151574'
+    print('\n\n')
     page = requests.get(link) #requests the webpage
     soup = bs(page.content,'html.parser') #parses the website with lxml framerwork
 
     artist,vinyl,release_date,label,cat_number = info_extract(soup,link)
+    print('Results')
+    print('---------------------------')
     print('Artist   : ', artist) #Done
     print('Vinyl    : ', vinyl) #Done
     print('Checked  : ', checked_date)
@@ -52,20 +54,11 @@ def info_extract(soup,link):
         else:
             label = 'N/A'
             cat_number = 'N/A'
-
-
-    #ARTIST AND VINYL EXTRACTION STARTS HERE
-    name_container = soup.find('meta',itemprop='name')
-    if name_container == None:
-        name_container = soup.find('meta',{'property':'og:title'}) #finds meta container with name of artist and vinyl
-
-    full_title = name_container['content'] #extracts data from meta container but has Artist and Vinyl in same string
-
-    title_and_songname = full_title.rsplit('-')# splits Artist and Vinyl into two strings
-
-    artist = title_and_songname[0] # assigning Artist string
-    vinyl = title_and_songname[1].replace(' ','',1)# assigning vinyl string
-
+        
+        for title in info.find_all('h1',{'id':'profile_title'}):
+            spans = title.find_all('span')
+            artist = spans[1].find('a').string
+            vinyl = spans[2].string.rstrip().lstrip()
     #csv_export(artist,vinyl,link,release_year)
     return(artist,vinyl,release_year,label,cat_number)
 
