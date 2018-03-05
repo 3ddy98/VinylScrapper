@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup as bs
 import requests
 import time
 import csv
-import msvcrt
 import datetime
 
 def main():
@@ -16,7 +15,7 @@ def main():
     condition = input('Please enter condition: ')
     #link = 'https://www.discogs.com/Dexys-Midnight-Runners-Emerald-Express-Come-On-Eileen/release/3151574'
     page = requests.get(link) #requests the webpage
-    soup = bs(page.content,'lxml') #parses the website with lxml framerwork
+    soup = bs(page.content,'html.parser') #parses the website with lxml framerwork
 
     artist,vinyl,release_date,label,cat_number = info_extract(soup,link)
     print('Artist   : ', artist) #Done
@@ -33,7 +32,7 @@ def main():
     #print('You should now have results gathered in your csv file')
     print('Press any key to exit...')
 
-    msvcrt.getch()#leaves the window open for 10 seconds by sleeping and not doing anything
+    time.sleep(3)
 
 def info_extract(soup,link):
     #DATE EXTRACTION STARTS HERE
