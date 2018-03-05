@@ -56,18 +56,25 @@ def info_extract(soup,link):
 
 
     #ARTIST AND VINYL EXTRACTION STARTS HERE
-    name_container = soup.find('meta',itemprop='name') #finds meta container with name of artist and vinyl
+    name_container = soup.find('meta',itemprop='name')
+    if name_container == None:
+        name_container = soup.find('meta',{'property':'og:title'}) #finds meta container with name of artist and vinyl
+
     full_title = name_container['content'] #extracts data from meta container but has Artist and Vinyl in same string
+
     title_and_songname = full_title.rsplit('-')# splits Artist and Vinyl into two strings
 
     artist = title_and_songname[0] # assigning Artist string
     vinyl = title_and_songname[1].replace(' ','',1)# assigning vinyl string
 
-    csv_export(artist,vinyl,link,release_year)
+    #csv_export(artist,vinyl,link,release_year)
     return(artist,vinyl,release_year,label,cat_number)
 
 def csv_export(artist,vinyl,checked_date,condition,cat_number,release_date,label,link):
-    print('')
+    with open('Rock Vinyl - #.csv', 'a') as Rock:
+        writer= csv.writer(Rock, delimiter=',')
+        data = [artist,vinyl,checked_date,condition,cat_number,release_date,label,link]
+        writer.writerow(data)
 
 
 if __name__ == "__main__":
