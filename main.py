@@ -20,10 +20,12 @@ def get_info(link):
     #Starting the search for needed information
     profile_container = soup.select(".profile")  #finding the profile container on the page
     for results in profile_container:
-        artist_title_container = results.find_all("h1")
-        for results in artist_title_container:
-            artist = results.find('a').string
-            print('\n\n' + artist)
+        artist_title_container = results.find_all('span')
+        artist = artist_title_container[1].find('a').string
+        title = artist_title_container[2].string.lstrip()
+    print(artist)
+    print(title)
+
 
 
 if __name__ == "__main__":
