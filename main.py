@@ -22,7 +22,7 @@ def get_info(link):
     for results in profile_container:
         artist_title_container = results.find_all('span')
         artist = artist_title_container[1].find('a').string
-        title = artist_title_container[2].string.lstrip()
+        title = artist_title_container[2].string.lstrip().rstrip()
     print(artist)
     print(title)
 
